@@ -9,7 +9,7 @@ const app = express();
 app.use(morgan("dev"));
 app.use(express.json());
 app.post(
-  "/users",
+  "/register",
   validate(registerUserSchema, {}, { abortEarly: false }),
   register
 );
