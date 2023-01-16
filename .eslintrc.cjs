@@ -2,7 +2,6 @@ module.exports = {
   env: {
     es2021: true,
     node: true,
-    jest: true,
   },
   extends: ["xo", "prettier"],
   overrides: [
@@ -21,21 +20,9 @@ module.exports = {
       },
     },
     {
-      files: ["./src/**/models/**/*.ts"],
+      files: ["src/**/models/*.ts"],
       rules: {
         "@typescript-eslint/naming-convention": "off",
-      },
-    },
-    {
-      files: ["./src/**/routers/**/*.ts"],
-      rules: {
-        "new-cap": "off",
-      },
-    },
-    {
-      files: ["./src/mongodb/*.ts"],
-      rules: {
-        "@typescript-eslint/no-unsafe-return": "off",
       },
     },
   ],
