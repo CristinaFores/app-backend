@@ -25,10 +25,17 @@ module.exports = {
         "@typescript-eslint/naming-convention": "off",
       },
     },
+    {
+      files: ["./src/**/routers/**/*.ts"],
+      rules: {
+        "new-cap": "off",
+      },
+    },
   ],
   parserOptions: {
     ecmaVersion: "latest",
     sourceType: "module",
   },
+
   rules: {},
 };
