@@ -1,9 +1,12 @@
+import "../.././loadEnviroment";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
 import { connectDb } from "../../dataBase";
+import bcrypt from "bcrypt";
 import User from "../../dataBase/models/User";
 import app from "../app";
 import request from "supertest";
+import type { RegisterData } from "../controllers/users/types";
 
 let server: MongoMemoryServer;
 
@@ -52,6 +55,48 @@ describe("Given a POST/ register enpoint", () => {
         .expect(expectStatus);
 
       expect(response.body.error).toBe("Email already exists");
+    });
+  });
+});
+
+describe("Given POST/ login endpoint", () => {
+  const registerctUser: RegisterData = {
+    username: "Cristina",
+    password: "123456789",
+    email: "cris@email.com",
+  };
+
+  describe("When it recieves a request the username: 'Cristina' , password:'0123456789',  email: 'cris@email.com' ", () => {
+    test("Then its should response status code 200 and the user", async () => {
+      const expectStatus = 200;
+
+      const hashedPassword = await bcrypt.hash(registerctUser.password, 10);
+
+      await User.create({
+        username: registerctUser.username,
+        password: hashedPassword,
+        email: registerctUser.email,
+      });
+
+      const response = await request(app)
+        .post("/login")
+        .send(registerctUser)
+        .expect(expectStatus);
+
+      expect(response.body).toHaveProperty("token");
+    });
+  });
+
+  describe("When it recieves a request the username: 'Cristina' , password'0123456789',  email: 'cris@email.com'", () => {
+    test("Then it should respond with a response status 401, and the message 'Wrong credentials'", async () => {
+      const expectedStatus = 401;
+
+      const response = await request(app)
+        .post("/login")
+        .send(registerctUser)
+        .expect(expectedStatus);
+
+      expect(response.body).toHaveProperty("error", "Wrong credentials");
     });
   });
 });
