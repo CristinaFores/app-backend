@@ -7,7 +7,7 @@ class CustomError extends Error {
   constructor(
     message: string,
     public statusCode: number,
-    public publicMesage: string
+    public publicMessage: string
   ) {
     super(message);
     debug(chalk.red(message));

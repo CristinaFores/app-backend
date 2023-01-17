@@ -37,7 +37,7 @@ export const generalError = (
   }
 
   const statusCode = error.statusCode ?? errorGeneral;
-  const publicMessage = error.publicMesage || "There is a error general";
+  const publicMessage = error.publicMessage || "There is a error general";
 
   res.status(statusCode).json({ error: publicMessage });
 };

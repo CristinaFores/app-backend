@@ -37,7 +37,9 @@
     "ts-jest": "^29.0.3",
     "typescript": "^4.8.4",
     "husky": "^8.0.0",
-    "lint-staged": "^13.0.3"
+    "lint-staged": "^13.0.3",
+    "@types/supertest": "^2.0.12",
+    "mongodb-memory-server": "^8.10.0"
   },
   "dependencies": {
     "express-validation": "^4.1.0",
