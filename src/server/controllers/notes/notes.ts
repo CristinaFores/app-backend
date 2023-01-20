@@ -62,3 +62,25 @@ export const updateNote = async (
     next(new CustomError((error as Error).message, 400, "Error updating post"));
   }
 };
+
+export const getNote = async (
+  req: CustomRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const { userId } = req;
+
+  try {
+    const notes = await Note.find({ userNotes: userId }).populate("owner");
+
+    res.status(200).json({ notes });
+  } catch (error: unknown) {
+    next(
+      new CustomError(
+        (error as Error).message,
+        500,
+        "Database doesn't work, try again later"
+      )
+    );
+  }
+};
