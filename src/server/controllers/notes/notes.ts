@@ -30,3 +30,35 @@ export const newNote = async (
     );
   }
 };
+
+export const updateNote = async (
+  req: CustomRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const { userId } = req;
+  const { title, description } = req.body as NoteStructure;
+
+  try {
+    const note = await Note.findOne({ _id: req.params.id });
+
+    if (note.owner.toString() !== userId) {
+      next(new CustomError("Not allowed", 403, " Update not allowed"));
+    }
+
+    const uodateNote = await Note.findByIdAndUpdate(
+      req.params.id,
+      {
+        title,
+        description,
+      },
+      {
+        new: true,
+      }
+    );
+
+    res.status(200).json(uodateNote);
+  } catch (error: unknown) {
+    next(new CustomError((error as Error).message, 400, "Error updating post"));
+  }
+};
