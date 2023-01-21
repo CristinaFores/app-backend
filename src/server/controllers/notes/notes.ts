@@ -11,19 +11,24 @@ export const newNote = async (
 ) => {
   const { userId } = req;
 
-  const { title, description } = req.body as NoteStructure;
+  const { title, description, imagePaths, buckpicture } =
+    req.body as NoteStructure;
 
   try {
     const note = {
       title,
       description,
+      imagePaths,
+      buckpicture,
       owner: userId,
       date: new Date(),
     };
 
-    const newNotes = await Note.create(note);
+    const newNote = await Note.create(note);
 
-    return res.status(201).json(newNotes);
+    return res
+      .status(201)
+      .json({ ...newNote.toJSON(), image: note.imagePaths });
   } catch (error: unknown) {
     next(
       new CustomError((error as Error).message, 400, "Error creating the post")

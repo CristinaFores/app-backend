@@ -2,7 +2,7 @@ import "../loadEnviroment.js";
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
-import { generalError, unknownEndpoint } from "./middlewares/errors.js";
+import { generalError, unknownEndpoint } from "./middlewares/errors/errors.js";
 import userRouters from "./routers/userRouters/userRouters.js";
 import corsOptions from "./cors/corsOptions.js";
 import notesRouters from "./routers/notesRouters,ts/notesRouters.js";

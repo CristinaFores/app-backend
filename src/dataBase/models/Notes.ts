@@ -39,7 +39,7 @@ const noteSchema = new Schema({
   },
 });
 
-const Note = model("Note", noteSchema, "notess");
+const Note = model("Note", noteSchema, "notes");
 export type NoteStructure = InferSchemaType<typeof noteSchema>;
 
 export default Note;
