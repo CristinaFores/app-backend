@@ -44,9 +44,10 @@ export const updateNote = async (
 
     if (note.owner.toString() !== userId) {
       next(new CustomError("Not allowed", 403, " Update not allowed"));
+      return;
     }
 
-    const uodateNote = await Note.findByIdAndUpdate(
+    const updateNote = await Note.findByIdAndUpdate(
       req.params.id,
       {
         title,
@@ -57,7 +58,7 @@ export const updateNote = async (
       }
     );
 
-    res.status(200).json(uodateNote);
+    res.status(200).json(updateNote);
   } catch (error: unknown) {
     next(new CustomError((error as Error).message, 400, "Error updating post"));
   }
