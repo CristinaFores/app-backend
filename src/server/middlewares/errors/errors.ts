@@ -1,8 +1,8 @@
-import "../../loadEnviroment.js";
+import "../../../loadEnviroment.js";
 import type { NextFunction, Request, Response } from "express";
-import CustomError from "../../CustomError/CustomError.js";
+import CustomError from "../../../CustomError/CustomError.js";
 import { ValidationError } from "express-validation";
-import { httpStatusCodes } from "../../utils/statusCodes.js";
+import { httpStatusCodes } from "../../../utils/statusCodes.js";
 
 const {
   clientErrors: { notFoundError },
