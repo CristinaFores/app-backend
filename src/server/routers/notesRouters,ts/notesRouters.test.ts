@@ -18,7 +18,7 @@ const requestUserToken = jwt.sign(
 );
 
 const requestUser2Token = jwt.sign(
-  { user: "Cristina2", id: "2" },
+  { user: "Cristina2", id: "6384fe9a96794a4b19432656" },
   environment.jwtSecret
 );
 
@@ -134,6 +134,21 @@ describe("Given a PATCH /note/:id enpoint", () => {
           .set("Content-Type", "application/json")
           .expect(400);
       });
+    });
+  });
+});
+
+describe("Given a GET /notes endpoint", () => {
+  beforeEach(async () => {
+    await Note.create(noteList);
+  });
+
+  describe("When I request all notes", () => {
+    test("Then it returns all notes", async () => {
+      await request(app)
+        .get(`/notes`)
+        .set("Authorization", `Bearer ${requestUserToken}`)
+        .expect(200);
     });
   });
 });
