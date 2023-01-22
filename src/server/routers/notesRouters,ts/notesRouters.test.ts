@@ -8,6 +8,7 @@ import request from "supertest";
 import app from "../../app";
 import jwt from "jsonwebtoken";
 import path from "path";
+import Note from "../../../dataBase/models/Notes";
 
 let server: MongoMemoryServer;
 
@@ -20,6 +21,18 @@ const requestUser2Token = jwt.sign(
   { user: "Cristina2", id: "2" },
   environment.jwtSecret
 );
+
+const noteId = "6384fe9a96794a4b19432654";
+const noteList = [
+  {
+    title: "12345678",
+    description: "esto es mi primera nota",
+    imagePaths: [""],
+    buckpicture: [""],
+    _id: noteId,
+    owner: "6384fe9a96794a4b19432655",
+  },
+];
 
 jest.mock("@supabase/supabase-js", () => ({
   createClient: () => ({
@@ -52,7 +65,7 @@ afterEach(async () => {
 
 describe("Given a POST /note enpoint", () => {
   describe("When i send a valid request body", () => {
-    test("Then the post is created", async () => {
+    test("Then the note is created", async () => {
       const note = {
         title: "12345678",
         description: "esto es mi primer nota",
@@ -78,6 +91,49 @@ describe("Given a POST /note enpoint", () => {
         .set("Authorization", `Bearer ${requestUser2Token}`)
         .send("")
         .expect(400);
+    });
+  });
+});
+
+describe("Given a PATCH /note/:id enpoint", () => {
+  beforeEach(async () => {
+    await Note.create(noteList);
+  });
+  describe("When i request to update a valid id", () => {
+    test("Then it should return the update note", async () => {
+      const note = await request(app)
+        .patch(`/note/${noteId}`)
+        .field("title", "12345678")
+        .set("Authorization", `Bearer ${requestUserToken}`)
+        .set("Content-Type", "application/json")
+        .expect(200);
+
+      expect(note.body).toMatchObject({
+        title: "12345678",
+      });
+    });
+  });
+
+  describe("When a user tries to update a note that is not his", () => {
+    describe("When a user tries to update a note that is not his", () => {
+      test("Then it should respond with a 403 status", async () => {
+        await request(app)
+          .patch(`/note/${noteId}`)
+          .field("title", "12345678")
+          .set("Authorization", `Bearer ${requestUser2Token}`)
+          .set("Content-Type", "application/json")
+          .expect(403);
+      });
+    });
+    describe("When I request to update an invalid id", () => {
+      test("Then it should respond with a 400 status", async () => {
+        await request(app)
+          .patch(`/note/1234`)
+          .field("title", "12345678")
+          .set("Authorization", `Bearer ${requestUserToken}`)
+          .set("Content-Type", "application/json")
+          .expect(400);
+      });
     });
   });
 });
