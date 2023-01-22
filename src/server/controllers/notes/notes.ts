@@ -77,7 +77,7 @@ export const getNote = async (
   const { userId } = req;
 
   try {
-    const notes = await Note.find({ userNotes: userId }).populate("owner");
+    const notes = await Note.find({ owner: userId }).populate("owner");
 
     res.status(200).json({ notes });
   } catch (error: unknown) {
