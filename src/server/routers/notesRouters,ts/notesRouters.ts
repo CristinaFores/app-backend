@@ -1,6 +1,12 @@
 import express from "express";
 import multer from "multer";
-import { getNote, newNote, updateNote } from "../../controllers/notes/notes.js";
+import {
+  deleteNoteById,
+  getNote,
+  getNoteById,
+  newNote,
+  updateNote,
+} from "../../controllers/notes/notes.js";
 
 import handleImage from "../../middlewares/handleImage/handleImage.js";
 
@@ -15,5 +21,7 @@ const upload = multer({
 notesRouters.post("/note", upload.single("image"), handleImage, newNote);
 notesRouters.patch("/note/:id", updateNote);
 notesRouters.get("/notes", getNote);
+notesRouters.delete("/note/:id", deleteNoteById);
+notesRouters.get("/note/:id", getNoteById);
 
 export default notesRouters;
