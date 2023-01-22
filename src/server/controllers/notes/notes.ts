@@ -90,3 +90,42 @@ export const getNote = async (
     );
   }
 };
+
+export const deleteNoteById = async (
+  req: CustomRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const { userId } = req;
+  const { id } = req.params;
+
+  try {
+    const note = await Note.findById({ _id: id });
+    if (note.owner.toString() !== userId) {
+      next(new CustomError("Not allowed", 403, " Delete not allowed"));
+      return;
+    }
+
+    await note.delete();
+
+    res.status(200).json({ message: "Note Deleted successfully" });
+  } catch (error: unknown) {
+    next(new CustomError((error as Error).message, 400, "Note not found no"));
+  }
+};
+
+export const getNoteById = async (
+  req: CustomRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+
+  try {
+    const note = await Note.findById(id);
+
+    res.status(200).json(note);
+  } catch (error: unknown) {
+    next(new CustomError((error as Error).message, 400, "Invalid Id"));
+  }
+};
