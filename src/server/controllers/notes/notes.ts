@@ -11,7 +11,7 @@ export const newNote = async (
 ) => {
   const { userId } = req;
 
-  const { title, description, imagePaths, buckpicture } =
+  const { title, description, imagePaths, buckpicture, category } =
     req.body as NoteStructure;
 
   try {
@@ -22,6 +22,7 @@ export const newNote = async (
       buckpicture,
       owner: userId,
       date: new Date(),
+      category,
     };
 
     const newNote = await Note.create(note);
@@ -42,7 +43,7 @@ export const updateNote = async (
   next: NextFunction
 ) => {
   const { userId } = req;
-  const { title, description } = req.body as NoteStructure;
+  const { title, description, category } = req.body as NoteStructure;
 
   try {
     const note = await Note.findOne({ _id: req.params.id });
@@ -57,6 +58,7 @@ export const updateNote = async (
       {
         title,
         description,
+        category,
       },
       {
         new: true,
