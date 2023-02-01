@@ -37,6 +37,7 @@ const noteSchema = new Schema({
   date: {
     type: Date,
   },
+  category: { type: String },
 });
 
 const Note = model("Note", noteSchema, "notes");

@@ -84,5 +84,5 @@ export const login = async (
   const token = jwt.sign(tokenPlayload, environment.jwtSecret, {
     expiresIn: "1d",
   });
-  res.status(200).json({ token });
+  res.status(200).json({ token, username });
 };
