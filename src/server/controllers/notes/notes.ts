@@ -23,6 +23,7 @@ export const newNote = async (
       owner: userId,
       date: new Date(),
       category,
+      status: "column-1",
     };
 
     const newNote = await Note.create(note);
@@ -43,7 +44,7 @@ export const updateNote = async (
   next: NextFunction
 ) => {
   const { userId } = req;
-  const { title, description, category } = req.body as NoteStructure;
+  const { title, description } = req.body as NoteStructure;
 
   try {
     const note = await Note.findOne({ _id: req.params.id });
@@ -58,7 +59,6 @@ export const updateNote = async (
       {
         title,
         description,
-        category,
       },
       {
         new: true,
@@ -129,5 +129,42 @@ export const getNoteById = async (
     res.status(200).json(note);
   } catch (error: unknown) {
     next(new CustomError((error as Error).message, 400, "Invalid Id"));
+  }
+};
+
+export const updateStatus = async (
+  req: CustomRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const { userId } = req;
+  const { status, title, description, imagePaths, buckpicture } =
+    req.body as NoteStructure;
+
+  try {
+    const note = await Note.findOne({ _id: req.params.id });
+
+    if (note.owner.toString() !== userId) {
+      next(new CustomError("Not allowed", 403, " Update not allowed"));
+      return;
+    }
+
+    const updateNote = await Note.findByIdAndUpdate(
+      req.params.id,
+
+      {
+        status,
+        title,
+        description,
+        imagePaths,
+        buckpicture,
+      },
+      {
+        new: true,
+      }
+    );
+    res.status(201).json({ ...updateNote.toJSON(), image: note.imagePaths });
+  } catch (error: unknown) {
+    next(new CustomError((error as Error).message, 400, "Error updating note"));
   }
 };
