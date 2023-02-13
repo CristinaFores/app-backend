@@ -6,6 +6,7 @@ import {
   getNoteById,
   newNote,
   updateNote,
+  updateStatus,
 } from "../../controllers/notes/notes.js";
 
 import handleImage from "../../middlewares/handleImage/handleImage.js";
@@ -23,5 +24,6 @@ notesRouters.patch("/note/:id", updateNote);
 notesRouters.get("/notes", getNote);
 notesRouters.delete("/note/:id", deleteNoteById);
 notesRouters.get("/note/:id", getNoteById);
+notesRouters.patch("/notes/:id", updateStatus);
 
 export default notesRouters;
