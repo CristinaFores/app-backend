@@ -34,10 +34,18 @@ const noteSchema = new Schema({
     ref: "User",
     required: true,
   },
+
   date: {
     type: Date,
   },
-  category: { type: String },
+
+  category: {
+    type: String,
+  },
+
+  status: {
+    type: String,
+  },
 });
 
 const Note = model("Note", noteSchema, "notes");
